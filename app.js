@@ -135,4 +135,36 @@ app.get("/auth-endpoint", auth, (request, response) => {
   response.json({ message: "You are authorized to access me" });
 });
 
+// user profile 
+app.get("/profile", auth, (request, response) => {
+  response.json({message: "Here is the profile page"});
+});
+
+// user dashboard
+app.get("/dashboard", auth, (request, response) => {
+  response.json({message: "Here is the dashboard"});
+});
+
+// courses page 
+app.get("/courses-list", (request, response) => {
+  response.json({message: "This will be a dynamic page with a list of courses in the database"});
+});
+
+// no-auth course page
+app.get("/course-page0", (request, response) => {
+  response.json({message: "This is a course page accessible without authentication"});
+});
+
+// auth course page
+app.get("/course-page1", auth, (request, response) => {
+  response.json({message: "This is a course page accessible with authentication only"});
+});
+
+// lesson page
+app.get("/lesson", auth, (request, response) => {
+  response.json({message: "This is a lesson page accessible with authentication only"});
+});
+
+
+
 module.exports = app;
