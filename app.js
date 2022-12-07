@@ -17,6 +17,9 @@ app.get("/", (request, response, next) => {
 // require database connection 
 const dbConnect = require("./db/dbConnect");
 const User = require("./db/userModel");
+const Course = require("./db/courseModel");
+const Lesson = require("./db/lessonModel");
+const Practice = require("./db/practiceModel");
 
 // execute database connection 
 dbConnect();
@@ -125,6 +128,143 @@ app.post("/login", (request, response) => {
     });
 });
 
+app.post("/add-course", (request, response) => {
+  const course = new Course({
+    courseCode: request.body.courseCode,
+    courseName: request.body.courseName,
+    description: request.body.description,
+    duration: request.body.duration,
+    lessons: request.body.lessons
+  })
+
+  course
+    .save()
+    // return success if the new user is added to the database successfully
+    .then((result) => {
+      response.status(201).send({
+        message: "Course Created Successfully",
+        result,
+      });
+    })
+    // catch error if the new user wasn't added successfully to the database
+    .catch((error) => {
+      response.status(500).send({
+        message: "Error creating course",
+        error,
+      });
+    });
+});
+
+app.post("/add-practice", (request, response) => {
+  const practice = new Practice({
+    practiceCode: request.body.practiceCode,
+    practiceName: request.body.practiceName,
+    description: request.body.description,
+    duration: request.body.duration
+  })
+
+  practice
+    .save()
+    // return success if the new user is added to the database successfully
+    .then((result) => {
+      response.status(201).send({
+        message: "Practice Created Successfully",
+        result,
+      });
+    })
+    // catch error if the new user wasn't added successfully to the database
+    .catch((error) => {
+      response.status(500).send({
+        message: "Error creating practice",
+        error,
+      });
+    });
+});
+
+app.post("/add-lesson", (request, response) => {
+  const lesson = new Lesson({
+    lessonCode: request.body.lessonCode,
+    lessonName: request.body.lessonName,
+    description: request.body.description,
+    duration: request.body.duration,
+    practiceLessons: request.body.practiceLessons
+  })
+
+  lesson
+    .save()
+    // return success if the new user is added to the database successfully
+    .then((result) => {
+      response.status(201).send({
+        message: "Lesson Created Successfully",
+        result,
+      });
+    })
+    // catch error if the new user wasn't added successfully to the database
+    .catch((error) => {
+      response.status(500).send({
+        message: "Error creating lesson",
+        error,
+      });
+    });
+});
+
+app.get("/courses", (request, response) =>{
+  Course.find({}, function(err, courses){
+    response.json(courses);
+  });
+});
+
+app.get("/lessons", (request, response) =>{
+  Lesson.find({}, function(err, lessons){
+    const lessonMap = {};
+
+    lessons.forEach(function(lesson){
+      lessonMap[lesson._id] = lesson;
+    });
+
+    response.json(lessonMap);
+  });
+});
+
+app.get("/practices", (request, response) =>{
+  Practice.find({}, function(err, practices){
+    const practiceMap = {};
+
+    practices.forEach(function(practice){
+      practiceMap[practice._id] = practice;
+    });
+
+    response.json(practiceMap);
+  });
+});
+
+app.get("/users", (request, response) =>{
+  User.find({}, function(err, users){
+
+    response.json(users);
+  });
+});
+
+app.get("/courses/:courseCode", async(request, response) => {
+  const course = await Course.findOne({courseCode: request.params.courseCode});
+  response.json(course);
+});
+
+app.get("/lessons/:lessonCode", async(request, response) => {
+  const lesson = await Lesson.findOne({lessonCode: request.params.lessonCode});
+  response.json(lesson);
+});
+
+app.get("/practices/:practiceCode", async(request, response) => {
+  const practice = await Practice.findOne({practiceCode: request.params.practiceCode});
+  response.json(practice);
+});
+
+app.get("/users/:email", async(request, response) => {
+  const user = await User.findOne({email: request.params.email});
+  response.send(user);
+});
+
 // free endpoint
 app.get("/free-endpoint", (request, response) => {
   response.json({ message: "You are free to access me anytime" });
@@ -163,6 +303,11 @@ app.get("/course-page1", auth, (request, response) => {
 // lesson page
 app.get("/lesson", auth, (request, response) => {
   response.json({message: "This is a lesson page accessible with authentication only"});
+});
+
+// practice lesson page
+app.get("/practice-lesson", auth, (request, response) => {
+  response.json({message: "This is a practice lesson page accessible with authentication only"});
 });
 
 
