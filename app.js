@@ -216,25 +216,13 @@ app.get("/courses", (request, response) =>{
 
 app.get("/lessons", (request, response) =>{
   Lesson.find({}, function(err, lessons){
-    const lessonMap = {};
-
-    lessons.forEach(function(lesson){
-      lessonMap[lesson._id] = lesson;
-    });
-
-    response.json(lessonMap);
+    response.json(lessons);
   });
 });
 
 app.get("/practices", (request, response) =>{
   Practice.find({}, function(err, practices){
-    const practiceMap = {};
-
-    practices.forEach(function(practice){
-      practiceMap[practice._id] = practice;
-    });
-
-    response.json(practiceMap);
+    response.json(practices);
   });
 });
 
