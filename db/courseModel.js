@@ -20,7 +20,8 @@ const CourseSchema = new mongoose.Schema({
         type: String,
         required: [true, "Please provide the course duration"]
     },
-    lessons: [{type: mongoose.Schema.Types.ObjectId, ref:'Lessons'}]
+    lessons: [{type: mongoose.Schema.Types.ObjectId, ref:'Lessons'}],
+    courseTakers: [{type: mongoose.Schema.Types.ObjectId, ref:'Users'}]
 });
 
 module.exports = mongoose.model.Courses || mongoose.model("Courses", CourseSchema);

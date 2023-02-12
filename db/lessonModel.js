@@ -20,7 +20,8 @@ const LessonSchema = new mongoose.Schema({
         type: String,
         required: [true, "Please provide the course duration"]
     },
-    practiceLessons: [{type:mongoose.Schema.Types.ObjectId, ref:'Practices'}]
+    practiceLessons: [{type: mongoose.Schema.Types.ObjectId, ref:'Practices'}],
+    quizzes: [{type: mongoose.Schema.Types.ObjectId, ref:'Quizzes'}]
 });
 
 module.exports = mongoose.model.Lessons || mongoose.model("Lessons", LessonSchema);

@@ -19,7 +19,8 @@ const PracticeSchema = new mongoose.Schema({
     duration: {
         type: String,
         required: [true, "Please provide the course duration"]
-    }
+    },
+    practiceSites: [{type: mongoose.Schema.Types.ObjectId, ref:'PracticeSites'}]
 });
 
 module.exports = mongoose.model.Practices || mongoose.model("Practices", PracticeSchema);

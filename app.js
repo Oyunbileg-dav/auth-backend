@@ -20,6 +20,8 @@ const User = require("./db/userModel");
 const Course = require("./db/courseModel");
 const Lesson = require("./db/lessonModel");
 const Practice = require("./db/practiceModel");
+const PracticeSite = require("./db/practiceSiteModel")
+const Quiz = require("./db/quizModel")
 
 // execute database connection 
 dbConnect();
@@ -208,6 +210,182 @@ app.post("/add-lesson", (request, response) => {
     });
 });
 
+// Add practice site
+app.post("/add-practice-site", (request, response) => {
+  const practiceSite = new PracticeSite({
+    practiceSiteCode: request.body.practiceSiteCode,
+    practiceSiteName: request.body.practiceSiteName,
+    description: request.body.description,
+    address: request.body.address
+  })
+
+  practiceSite
+    .save()
+    // return success if the new user is added to the database successfully
+    .then((result) => {
+      response.status(201).send({
+        message: "Practice Site Created Successfully",
+        result,
+      });
+    })
+    // catch error if the new user wasn't added successfully to the database
+    .catch((error) => {
+      response.status(500).send({
+        message: "Error creating practice site",
+        error,
+      });
+    });
+});
+
+// Add practice site
+app.post("/add-quiz", (request, response) => {
+  const quiz = new Quiz({
+    quizCode: request.body.quizCode,
+    quizPrompt: request.body.quizPrompt,
+    hint: request.body.hint,
+    options: request.body.options,
+    answer: request.body.answer,
+    lessons: request.body.lessons
+  })
+
+  quiz
+    .save()
+    // return success if the new user is added to the database successfully
+    .then((result) => {
+      response.status(201).send({
+        message: "Quiz Created Successfully",
+        result,
+      });
+    })
+    // catch error if the new user wasn't added successfully to the database
+    .catch((error) => {
+      response.status(500).send({
+        message: "Error creating quiz",
+        error,
+      });
+    });
+});
+
+// Experiment : add lessons to courses 
+app.post("/add-lesson-to-course", async(request, response) => {
+  const lesson = await Lesson.findOne({lessonCode: request.body.lessonCode});
+  const course = await Course.findOne({courseCode: request.body.courseCode});
+  course.lessons.push(lesson);
+  
+  course
+    .save()
+    // return success if the new user is added to the database successfully
+    .then((result) => {
+      response.status(201).send({
+        message: "Lesson is added to course Successfully",
+        result,
+      });
+    })
+    // catch error if the new user wasn't added successfully to the database
+    .catch((error) => {
+      response.status(500).send({
+        message: "Error adding lesson to course",
+        error,
+      });
+    });
+});
+
+// Experiment : add practicelessons to lessons 
+app.post("/add-practice-to-lesson", async(request, response) => {
+  const practice = await Practice.findOne({practiceCode: request.body.practiceCode});
+  const lesson = await Lesson.findOne({lessonCode: request.body.lessonCode});
+  lesson.practiceLessons.push(practice);
+  
+  lesson
+    .save()
+    // return success if the new user is added to the database successfully
+    .then((result) => {
+      response.status(201).send({
+        message: "Practice is added to lesson Successfully",
+        result,
+      });
+    })
+    // catch error if the new user wasn't added successfully to the database
+    .catch((error) => {
+      response.status(500).send({
+        message: "Error adding practice to lesson",
+        error,
+      });
+    });
+});
+
+// Experiment : add user to courses 
+app.post("/add-user-to-course", async(request, response) => {
+  const course = await Course.findOne({courseCode: request.body.courseCode});
+  const user = await User.findOne({email: request.body.userEmail});
+  course.courseTakers.push(user);
+  
+  course
+    .save()
+    // return success if the new user is added to the database successfully
+    .then((result) => {
+      response.status(201).send({
+        message: "User is added to course Successfully",
+        result,
+      });
+    })
+    // catch error if the new user wasn't added successfully to the database
+    .catch((error) => {
+      response.status(500).send({
+        message: "Error adding user to course",
+        error,
+      });
+    });
+});
+
+// Experiment : add practiceSite to practice 
+app.post("/add-practicesite-to-practice", async(request, response) => {
+  const practicesite = await PracticeSite.findOne({practiceSiteCode: request.body.practiceSiteCode});
+  const practice = await Practice.findOne({practiceCode: request.body.practiceCode});
+  practice.practiceSites.push(practicesite);
+  
+  practice
+    .save()
+    // return success if the new user is added to the database successfully
+    .then((result) => {
+      response.status(201).send({
+        message: "Practice site is added to practice Successfully",
+        result,
+      });
+    })
+    // catch error if the new user wasn't added successfully to the database
+    .catch((error) => {
+      response.status(500).send({
+        message: "Error adding practiceSite to practice",
+        error,
+      });
+    });
+});
+
+// Experiment : add quiz to lessons 
+app.post("/add-quiz-to-lesson", async(request, response) => {
+  const quiz = await Quiz.findOne({quizCode: request.body.quizCode});
+  const lesson = await Lesson.findOne({lessonCode: request.body.lessonCode});
+  lesson.quizzes.push(quiz);
+  
+  lesson
+    .save()
+    // return success if the new user is added to the database successfully
+    .then((result) => {
+      response.status(201).send({
+        message: "Quiz is added to lesson Successfully",
+        result,
+      });
+    })
+    // catch error if the new user wasn't added successfully to the database
+    .catch((error) => {
+      response.status(500).send({
+        message: "Error adding quiz to lesson",
+        error,
+      });
+    });
+});
+
 app.get("/courses", (request, response) =>{
   Course.find({}, function(err, courses){
     response.json(courses);
@@ -233,6 +411,13 @@ app.get("/users", (request, response) =>{
   });
 });
 
+app.get("/practice-sites", (request, response) =>{
+  PracticeSite.find({}, function(err, practicesites){
+
+    response.json(practicesites);
+  });
+});
+
 app.get("/courses/:courseCode", async(request, response) => {
   const course = await Course.findOne({courseCode: request.params.courseCode});
   response.json(course);
@@ -253,15 +438,7 @@ app.get("/users/:email", async(request, response) => {
   response.send(user);
 });
 
-// free endpoint
-app.get("/free-endpoint", (request, response) => {
-  response.json({ message: "You are free to access me anytime" });
-});
 
-// authentication endpoint
-app.get("/auth-endpoint", auth, (request, response) => {
-  response.json({ message: "You are authorized to access me" });
-});
 
 // user profile 
 app.get("/profile", auth, (request, response) => {
@@ -271,6 +448,12 @@ app.get("/profile", auth, (request, response) => {
 // user dashboard
 app.get("/dashboard", auth, (request, response) => {
   response.json({message: "Here is the dashboard"});
+});
+
+// get dashboard
+app.get("/get-dashboard", auth, (request, response) => {
+  const user = request.user;
+  response.json(user)
 });
 
 // courses page 
