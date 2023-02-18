@@ -451,7 +451,7 @@ app.get("/dashboard", auth, (request, response) => {
 });
 
 // get dashboard
-app.get("/get-dashboard", auth, (request, response) => {
+app.get("/get-dashboard", (request, response) => {
   const user = request.user;
   response.json(user)
 });
