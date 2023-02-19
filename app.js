@@ -451,9 +451,9 @@ app.get("/dashboard", auth, (request, response) => {
 });
 
 // get dashboard
-app.get("/get-dashboard", async(request, response) => {
+app.get("/get-dashboard", auth, (request, response) => {
   const user = request.user;
-  response.json(user)
+  response.json({userData: user, message: "get dashboard is working"})
 });
 
 // courses page 
