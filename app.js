@@ -454,7 +454,7 @@ app.get("/dashboard", auth, (request, response) => {
 app.get("/get-dashboard", auth, async(request, response) => {
   const user = request.user;
   const user_l = await User.findOne({email: user.userEmail});
-  response.json({userdata: user_l, message: "get dashboard"})
+  response.json(user_l)
 });
 
 // courses page 
