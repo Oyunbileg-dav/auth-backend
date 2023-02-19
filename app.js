@@ -451,9 +451,10 @@ app.get("/dashboard", auth, (request, response) => {
 });
 
 // get dashboard
-app.get("/get-dashboard", auth, (request, response) => {
+app.get("/get-dashboard", auth, async(request, response) => {
   const user = request.user;
-  response.json(user)
+  const users = await User.findOne({email: user.email});
+  response.json({userdata: users, message: "get dashboard"})
 });
 
 // courses page 
