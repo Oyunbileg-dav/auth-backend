@@ -386,6 +386,30 @@ app.post("/add-quiz-to-lesson", async(request, response) => {
     });
 });
 
+// Experiment : add quiz to lessons 
+app.post("/add-course-to-user", async(request, response) => {
+  const course = await Course.findOne({courseCode: request.body.courseCode});
+  const user = await User.findOne({email: request.body.userEmail});
+  user.courses.push(course);
+  
+  user
+    .save()
+    // return success if the new user is added to the database successfully
+    .then((result) => {
+      response.status(201).send({
+        message: "Course is added to user Successfully",
+        result,
+      });
+    })
+    // catch error if the new user wasn't added successfully to the database
+    .catch((error) => {
+      response.status(500).send({
+        message: "Error adding course to user",
+        error,
+      });
+    });
+});
+
 app.get("/courses", (request, response) =>{
   Course.find({}, function(err, courses){
     response.json(courses);
