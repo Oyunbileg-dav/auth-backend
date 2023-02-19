@@ -453,7 +453,7 @@ app.get("/dashboard", auth, (request, response) => {
 // get dashboard
 app.get("/get-dashboard", auth, (request, response) => {
   const user = request.user;
-  response.json({userData: user, message: "get dashboard is working #2"})
+  response.json({userData: user.email, message: "get dashboard is working #2"})
 });
 
 // courses page 
