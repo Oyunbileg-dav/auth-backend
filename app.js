@@ -450,11 +450,10 @@ app.get("/dashboard", auth, (request, response) => {
   response.json({message: "Here is the dashboard"});
 });
 
-// get dashboard
+// get dashboard ERROR!
 app.get("/get-dashboard", auth, async(request, response) => {
   const user = request.user;
-  const users = await User.findOne({email: user.email});
-  response.json({userdata: users, message: "get dashboard"})
+  response.json({userdata: user, message: "get dashboard"})
 });
 
 // courses page 
