@@ -452,9 +452,6 @@ app.get("/dashboard", auth, (request, response) => {
 
 // get dashboard
 app.get("/get-dashboard", auth, (request, response) => {
-  let token = request.headers.authorization.split(" ")[1]; // Bearer <token>
-  let result = jwt.verify(token, "JWT_SECRET", options);
-  request.user = result;
   const user = request.user;
   response.json({userData: user, message: "get dashboard is working #2"})
 });
