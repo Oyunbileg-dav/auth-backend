@@ -462,10 +462,14 @@ app.get("/users/:email", async(request, response) => {
   response.send(user);
 });
 
+app.get("/courses/:courseCode/lessons", async(request, response) => {
+  const course = await Course.findOne({courseCode: request.params.courseCode}).populate('lessons');
+  response.json(course.lessons);
+});
 
 
 // user profile 
-app.get("/profile", auth, (request, response) => {
+app.get("/profile", (request, response) => {
   response.json({message: "Here is the profile page"});
 });
 
