@@ -470,8 +470,10 @@ app.get("/profile", auth, (request, response) => {
 });
 
 // user dashboard
-app.get("/dashboard", auth, (request, response) => {
-  response.json({message: "Here is the dashboard"});
+app.get("/dashboard", auth, async(request, response) => {
+  const user = await User.findOne({email: request.user.userEmail});
+  const all = await Course.find({ 'courseTakers': user._id });
+  response.json(all)
 });
 
 // get dashboard ERROR!
