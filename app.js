@@ -468,6 +468,16 @@ app.get("/courses/:courseCode/lessons", async(request, response) => {
 });
 
 
+app.get("/lessons/:lessonCode/practice-lessons", async(request, response) => {
+  const lesson = await Lesson.findOne({lessonCode: request.params.lessonCode}).populate('practices');
+  response.json(lesson.practiceLessons);
+});
+
+app.get("/practice-lessons/:practiceCode/practice-sites", async(request, response) => {
+  const practice = await Practice.findOne({practiceCode: request.params.practiceCode}).populate('PracticeSites');
+  response.json(practice.practiceSites);
+});
+
 // user profile 
 app.get("/profile", (request, response) => {
   response.json({message: "Here is the profile page"});
