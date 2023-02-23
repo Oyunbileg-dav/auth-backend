@@ -503,7 +503,7 @@ app.get("/dashboard", auth, async(request, response) => {
 // get dashboard ERROR!
 app.get("/get-email", auth, async(request, response) => {
   const user = await User.findOne({email: request.user.userEmail});
-  response.json(user.email)
+  response.json(user)
 });
 
 // courses page 
