@@ -457,6 +457,11 @@ app.get("/practices/:practiceCode", async(request, response) => {
   response.json(practice);
 });
 
+app.get("/practice-sites/:practiceSiteCode", async(request, response) =>{
+  const practiceSite = await PracticeSite.findOne({practiceSiteCode: request.params.practiceSiteCode});
+  response.json(practiceSite);
+});
+
 app.get("/users/:email", async(request, response) => {
   const user = await User.findOne({email: request.params.email});
   response.send(user);
