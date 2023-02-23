@@ -23,8 +23,7 @@ const QuizSchema = new mongoose.Schema({
     answer: {
         type: String,
         required: [true, "Please provide the quiz answer"]
-    },
-    lessons: [{type: mongoose.Schema.Types.ObjectId, ref:'Lessons'}]
+    }
 });
 
 module.exports = mongoose.model.Quizzes || mongoose.model("Quizzes", QuizSchema);

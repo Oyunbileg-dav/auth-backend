@@ -468,13 +468,18 @@ app.get("/courses/:courseCode/lessons", async(request, response) => {
 });
 
 
-app.get("/lessons/:lessonCode/practice-lessons", async(request, response) => {
-  const lesson = await Lesson.findOne({lessonCode: request.params.lessonCode}).populate('practices');
+app.get("/lessons/:lessonCode/practices", async(request, response) => {
+  const lesson = await Lesson.findOne({lessonCode: request.params.lessonCode}).populate('practiceLessons');
   response.json(lesson.practiceLessons);
 });
 
-app.get("/practice-lessons/:practiceCode/practice-sites", async(request, response) => {
-  const practice = await Practice.findOne({practiceCode: request.params.practiceCode}).populate('PracticeSites');
+app.get("/lessons/:lessonCode/quizzes", async(request, response) => {
+  const lesson = await Lesson.findOne({lessonCode: request.params.lessonCode}).populate('quizzes');
+  response.json(lesson.quizzes);
+});
+
+app.get("/practices/:practiceCode/practice-sites", async(request, response) => {
+  const practice = await Practice.findOne({practiceCode: request.params.practiceCode}).populate('practiceSites');
   response.json(practice.practiceSites);
 });
 
